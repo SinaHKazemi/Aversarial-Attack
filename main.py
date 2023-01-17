@@ -1,13 +1,17 @@
-# pr = Parameters(
-#     10,
-#     1,
-#     1,
-#     1,
-#     1,
-#     [1,2],
-#     [3,4]
-# )   
+from model import HouseParameters, AttackParams, HouseModel
 
-# hm = HouseModel(pr)
-# hm.add_variables()
-# hm.add_primal_constraints()
+pr = HouseParameters(
+    10,
+    1,
+    1,
+    1,
+    1,
+    1,
+    [1,2],
+    [3,4]
+)   
+ap = AttackParams()
+
+hm = HouseModel(pr, ap)
+hm._add_vars()
+hm._fix_vars("primal")
