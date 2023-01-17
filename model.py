@@ -36,6 +36,10 @@ class AttackParams:
     norm: int = 1 # norm of the objective function, 1 results in a linear model and 2 results in a convex quadratic one
     total_delta_ub: float = GRB.INFINITY
 
+@dataclass(frozen=True)
+class PADM_Params:
+    initial_mu: float
+    increase_factor: float
 
 class HouseModel():
     def __init__(self, house_params: HouseParameters, attack_params: AttackParams):       
@@ -563,17 +567,31 @@ class Control():
         hm.add_dual_constrs()
         hm.add_aux_constrs()
         hm.add_sos_constrs()
-        # calc ub for valid inequality
-        hm.add_valid_ineq_constr()
-        hm.solve() 
+        ub = self.get_ub_valid_ineq()
+        hm.add_valid_ineq_constr(ub)
+        hm.solve()
     
-    def PADM_attack(self):
+    def PADM_attack(self, PADM_params: PADM_Params):
         hm = HouseModel(house_params=self.house_params, attack_params=self.attack_params)
         hm.add_vars()
         hm.add_upper_level_constrs()
         hm.add_primal_constrs()
         hm.add_dual_constrs()
-        hm.solve()
+        # initial values
+        mu = PADM_params.initial_mu
+        primal_values = None
+        upper_level_values = None
+        while True:
+            hm.set_PADM_obj(mu)
+            primal_values
+            hm.solve()
+            if False:
+                break
+            else:
+                mu *= PADM_params.increase_factor
+        
+
+            
 
     
 
