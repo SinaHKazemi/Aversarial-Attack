@@ -628,7 +628,11 @@ class Control():
         print(hm.get_values("primal")["capacity_PV"])
         return {
             "demands": hm.get_demands(),
-            "changed_demands": hm.get_changed_demands()
+            "changed_demands": hm.get_changed_demands(),
+            "PV": hm.get_values("primal")["energy_PV"],
+            "battery": hm.get_values("primal")["energy_battery"],
+            "buy": hm.get_values("primal")["energy_buy"],
+            "sell": hm.get_values("primal")["energy_sell"]
         }
 
     def sos_attack(self):
@@ -643,6 +647,13 @@ class Control():
         hm.solve()
         print(hm.get_obj_value("primal"))
         print(hm.get_obj_value("dual"))
+        return {
+            "demands": hm.get_demands(),
+            "changed_demands": hm.get_changed_demands(),
+            "PV": hm.get_values("primal")["energy_PV"],
+            "battery": hm.get_values("primal")["energy_battery"],
+            "buy": hm.get_values("primal")["energy_buy"],
+        }
     
     def get_ub_valid_ineq(self) -> list[float]:
         hm = HouseModel(house_params=self.house_params, attack_params=self.attack_params)
